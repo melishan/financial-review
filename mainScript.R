@@ -37,3 +37,18 @@ z #if you want to get categories names then don't convert factors to numbers lik
 fin$Expenses <- gsub(" Dollars", "", fin$Expenses)
 fin$Expenses <- gsub(",", "", fin$Expenses)
 head(fin)
+fin$Revenue <- gsub("\\$", "", fin$Revenue)
+head(fin)
+fin$Revenue <- gsub(",", "", fin$Revenue)
+head(fin)
+fin$Growth <- gsub("\\%", "", fin$Growth)
+fin$Expenses <- as.numeric(fin$Expenses)
+fin$Revenue <- as.numeric(fin$Revenue)
+fin$Growth <- as.numeric(fin$Growth)
+str(fin)
+summary(fin)
+#dealing with missing data
+head(fin, 24)
+complete.cases(fin) #function returns FALSE if a row has at least one NA
+fin[!complete.cases(fin),] #shows rows with NA
+
