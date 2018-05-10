@@ -3,9 +3,10 @@ getwd()
 setwd("/Users/melis/Desktop/R/financialReviewUpdated")
 getwd()
 
-fin <- read.csv("Future-500.csv")
+#First fin <- read.csv("Future-500.csv")
+fin <- read.csv("Future-500.csv", na.strings = c(""))
 fin
-head(fin)
+head(fin, 30)
 tail(fin)
 summary(fin)
 str(fin)
@@ -51,4 +52,14 @@ summary(fin)
 head(fin, 24)
 complete.cases(fin) #function returns FALSE if a row has at least one NA
 fin[!complete.cases(fin),] #shows rows with NA
+
+#empty strings don't count as NA in R so we import the dataset as fin <- read.csv("Future-500.csv", na.strings = c(""))
+
+#filtering
+fin$Industry == "Software" #logical vector to filter dataset
+fin[fin$Industry == "Software", ] #it gives NA results as well
+which(fin$Industry == "Software") #it gives row names that contains filtered variable
+fin[which(fin$Industry == "Software"),] #it gives dataset which contains filtered variable without NA's
+
+
 
