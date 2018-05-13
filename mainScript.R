@@ -61,5 +61,100 @@ fin[fin$Industry == "Software", ] #it gives NA results as well
 which(fin$Industry == "Software") #it gives row names that contains filtered variable
 fin[which(fin$Industry == "Software"),] #it gives dataset which contains filtered variable without NA's
 
+#filtering: using is.na() for missing data
+is.na(fin$Expenses)
 
+#removing records with missing data
+fin_backup <- fin 
 
+fin[!complete.cases(fin),]
+fin[is.na(fin$Industry),]
+fin[!is.na(fin$Industry),] #opposite
+fin <- fin[!is.na(fin$Industry),]
+fin
+
+#resetting the dataframe index
+rownames(fin) <- 1:nrow(fin)
+
+rownames(fin) <- NULL
+fin
+#Factual Data Analysis
+fin[!complete.cases(fin),]
+fin[is.na(fin$State),]
+fin[is.na(fin$State) & fin$City == "New York",]
+fin[is.na(fin$State) & fin$City == "New York","State"] <- "NY"
+#check
+fin[c(11,377),]
+fin[is.na(fin$State) & fin$City =="San Francisco",]
+fin[is.na(fin$State) & fin$City =="San Francisco","State"] <- "CA"
+#check again
+fin[c(82,265),]
+
+#Replacing Missing Data: Median Imputation Method
+fin[!complete.cases(fin),]
+med_emp_ret <- median(fin[fin$Industry=="Retail","Employees"], na.rm = TRUE)
+mean(fin[,"Employees"], na.rm = TRUE)
+mean(fin[fin$Industry=="Retail","Employees"], na.rm = TRUE)
+med_emp_ret
+fin[is.na(fin$Employees) & fin$Industry =="Retail","Employees"] <- med_emp_ret
+median(fin[fin$Industry=="Retail","Employees"])
+#check
+fin[c(3),]
+#Replacing Missing Data: Median Imputation Method - Employees
+fin[!complete.cases(fin),]
+mean(fin[,"Employees"], na.rm =TRUE)
+median(fin[,"Employees"], na.rm =TRUE)
+mean(fin[fin$Industry =="Financial Services","Employees"], na.rm =TRUE)
+median(fin[fin$Industry =="Financial Services","Employees"], na.rm =TRUE)
+med_emp_fin <- median(fin[fin$Industry == "Financial Services","Employees"], na.rm =TRUE)
+fin[is.na(fin$Employees) & fin$Industry == "Financial Services","Employees"] <- med_emp_fin
+#check
+fin[330,]
+
+#Replacing Missing Data: Median Imputation Method - Growth
+fin[!complete.cases(fin),]
+mean(fin[,"Growth"], na.rm = TRUE)
+median(fin[,"Growth"], na.rm = TRUE)
+mean(fin[fin$Industry== "Construction","Growth"], na.rm = TRUE)
+median(fin[fin$Industry== "Construction","Growth"], na.rm = TRUE)
+med_growth_cons <- median(fin[fin$Industry== "Construction","Growth"], na.rm = TRUE)
+med_growth_cons
+fin[is.na(fin$Growth) & fin$Industry =="Construction", "Growth"] <- med_growth_cons
+#check
+fin[8,]
+
+fin[!complete.cases(fin),]
+
+#Replacing Missing Data - Revenue
+median(fin[,"Revenue"], na.rm = TRUE)
+mean(fin[fin$Industry =="Construction","Revenue"], na.rm = TRUE)
+med_rev_cons <- median(fin[fin$Industry =="Construction","Revenue"], na.rm = TRUE)
+fin[is.na(fin$Revenue) & fin$Industry =="Construction", "Revenue"] <- med_rev_cons
+#check
+fin[c(8,42),]
+
+#Replacing Missing Data - Expenses
+median(fin[,"Expenses"], na.rm = TRUE)
+mean(fin[,"Expenses"], na.rm = TRUE)
+median(fin[fin$Industry=="Construction","Expenses"], na.rm = TRUE)
+mean(fin[fin$Industry=="Construction","Expenses"], na.rm = TRUE)
+med_exp_cons <- median(fin[fin$Industry=="Construction","Expenses"], na.rm = TRUE)
+fin[is.na(fin$Expenses) & fin$Industry == "Construction","Expenses"] <- med_exp_cons
+#check
+fin[c(8,42),]
+fin[!complete.cases(fin),]
+#To prevent to overwrite data which has value in particular column
+#add a filter
+#in this case IT Services has NA in Expenses however it is already a calculated variable 
+#which we know revenue and profit parameters
+fin[is.na(fin$Expenses) & fin$Industry == "Construction" & is.na(fin$Profit),]
+
+#Replacing Missing Data - deriving values
+fin[is.na(fin$Profit),"Profit"] <- fin[is.na(fin$Profit),"Revenue"] - fin[is.na(fin$Profit),"Expenses"]
+#check
+fin[c(8,42),]
+
+fin[!complete.cases(fin),]
+
+fin[is.na(fin$Expenses), "Expenses"] <- fin[is.na(fin$Expenses), "Revenue"] - fin[is.na(fin$Expenses), "Profit"]
+fin[15,]
