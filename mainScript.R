@@ -158,3 +158,27 @@ fin[!complete.cases(fin),]
 
 fin[is.na(fin$Expenses), "Expenses"] <- fin[is.na(fin$Expenses), "Revenue"] - fin[is.na(fin$Expenses), "Profit"]
 fin[15,]
+
+#Visualization
+install.packages("ggplot2")
+library(ggplot2)
+
+#Scatterplot 1
+p <- ggplot(data=fin)
+p
+p + geom_point(aes(x=Revenue, y=Expenses, colour=Industry, size=Profit))
+
+#Scatterplot 2
+fancy_plot <- ggplot(data=fin, aes(x=Revenue, y= Expenses,
+                                              colour=Industry))
+fancy_plot + geom_point() +
+              geom_smooth(fill=NA, size=2)
+#Boxplot
+fancy_bplot <- ggplot(data=fin, aes(x=Industry, y=Growth, 
+                                    colour=Industry))
+fancy_bplot + geom_boxplot()
+
+#Boxplot 2
+fancy_bplot + geom_jitter() +
+              geom_boxplot(size=0.5, alpha=0.5, 
+                           outlier.color = NA)
